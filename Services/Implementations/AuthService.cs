@@ -11,7 +11,7 @@ namespace RBAC.Services.Implementations;
 
 public class AuthService(DataContext context, IConfiguration configuration, IPermissionService permissionService) : IAuthService
 {
-    public async Task<(bool Success, string Token, User user)> AuthenticateAsync(string email, string password)
+    public async Task<(bool Success, string? Token, User? user)> AuthenticateAsync(string email, string password)
     {
         var user = await context.Users
             .Include(u => u.UserRoles)

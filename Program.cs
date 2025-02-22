@@ -6,9 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddCorsPolicy();
-
-builder.Services.AddSwaggerServices();
+builder.Services.AddSwaggerWithJwtAuth();
 
 builder.Services.AddServices(builder.Configuration);
 
@@ -18,11 +16,9 @@ builder.Services.AddRbacServices();
 
 var app = builder.Build();
 
-app.UseCorsPolicy();
-
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwaggerServices();
+    app.UseSwaggerWithUI();
 }
 
 app.UseHttpsRedirection();

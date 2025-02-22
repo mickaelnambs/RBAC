@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Authorization;
 
 namespace RBAC.Authorization;
@@ -10,9 +9,9 @@ public static class PermissionPolicyExtension
         services.AddAuthorization(options =>
         {
             options.AddPolicy("Permission", policy =>
-                policy.Requirements.Add(new PermissionRequirement()));
+                policy.RequireAuthenticatedUser());
         });
 
         services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
-    }
+}
 }
