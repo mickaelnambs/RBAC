@@ -1,7 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using RBAC.Authorization;
 using RBAC.Services.Implementations;
 using RBAC.Services.Interfaces;
 
