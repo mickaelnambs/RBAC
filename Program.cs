@@ -1,5 +1,10 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using RBAC.Authorization;
+using RBAC.Data;
 using RBAC.Extensions;
+using RBAC.Services.Implementations;
+using RBAC.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +55,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddScoped<IPermissionService, PermissionService>();
+builder.Services.AddJwtAuthentication(builder.Configuration);
+
+builder.Services.AddPermissionPolicies();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -71,8 +81,28 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseHttpsRedirection();
+
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
+
+try
+{
+    using var scope = app.Services.CreateScope();
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<DataContext>();
+    await context.Database.MigrateAsync();
+    
+    await RbacSeedData.SeedRolesAndPermissionsAsync(context);
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex);
+    throw;
+}
 
 app.Run();
