@@ -1,6 +1,7 @@
-using System;
 using Microsoft.EntityFrameworkCore;
 using RBAC.Data;
+using RBAC.Services.Implementations;
+using RBAC.Services.Interfaces;
 
 namespace RBAC.Extensions;
 
@@ -20,6 +21,8 @@ public static class ApplicationServiceExtension
                     sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
                 });
         });
+
+        services.AddScoped<IPermissionService, PermissionService>();
 
         return services;
     }
